@@ -4,7 +4,7 @@
 ## Author: F0rty_tw0
 ## Category: Chat
 ## IconTexture: Interface\AddOns\WhisperMessenger\Media\icon.tga
-## Version: v2.0.2
+## Version: v2.0.3
 ## X-Website: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-
 ## X-WotLK-Backport: JGoldz75
 ## X-Original-Version: v2.0.1

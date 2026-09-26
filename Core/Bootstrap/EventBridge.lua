@@ -112,8 +112,7 @@ local function applyIncomingEffects(runtime, result)
       and settings
       and settings.autoOpenIncoming == true
       and runtime.onAutoOpen
-      and type(_G.InCombatLockdown) == "function"
-      and not _G.InCombatLockdown()
+      and (settings.autoOpenIncomingOutOfCombatOnly == false or (type(_G.InCombatLockdown) == "function" and not _G.InCombatLockdown()))
       and not inGroupsTab
     then
       runtime.onAutoOpen(result.conversationKey)

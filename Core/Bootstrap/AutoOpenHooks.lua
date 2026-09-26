@@ -63,6 +63,10 @@ function AutoOpenHooks.Create(deps)
     if not conversationKey then
       return
     end
+    local settings = deps.getSettings and deps.getSettings() or {}
+    if settings.autoOpenIncomingOutOfCombatOnly ~= false and deps.isInCombat and deps.isInCombat() then
+      return
+    end
     -- When the window is already open and the user is viewing a conversation,
     -- don't steal focus by switching to the new whisper's conversation.
     local isVisible = deps.isWindowVisible and deps.isWindowVisible()

@@ -42,13 +42,14 @@ function BehaviorSettings.Create(factory, parent, config, options)
   local hideFromDefaultChatToggle = toggles[3]
   local profanityFilterToggle = toggles[4]
   local autoOpenIncomingToggle = toggles[5]
-  local autoOpenOutgoingToggle = toggles[6]
-  local hideOnCombatToggle = toggles[7]
-  local doubleEscapeToggle = toggles[8]
-  local showGroupChatsToggle = toggles[9]
-  local requestsInboxToggle = toggles[10]
-  local shareTypingToggle = toggles[11]
-  local shareReadReceiptsToggle = toggles[12]
+  local autoOpenIncomingOutOfCombatOnlyToggle = toggles[6]
+  local autoOpenOutgoingToggle = toggles[7]
+  local hideOnCombatToggle = toggles[8]
+  local doubleEscapeToggle = toggles[9]
+  local showGroupChatsToggle = toggles[10]
+  local requestsInboxToggle = toggles[11]
+  local shareTypingToggle = toggles[12]
+  local shareReadReceiptsToggle = toggles[13]
 
   local panel = SettingsControls.NewPanelRegistry()
   panel:bind(dimToggle, { type = "toggle", key = "dimWhenMoving", default = DEFAULTS.dimWhenMoving })
@@ -66,6 +67,11 @@ function BehaviorSettings.Create(factory, parent, config, options)
     end,
   })
   panel:bind(autoOpenIncomingToggle, { type = "toggle", key = "autoOpenIncoming", default = DEFAULTS.autoOpenIncoming })
+  panel:bind(autoOpenIncomingOutOfCombatOnlyToggle, {
+    type = "toggle",
+    key = "autoOpenIncomingOutOfCombatOnly",
+    default = DEFAULTS.autoOpenIncomingOutOfCombatOnly,
+  })
   panel:bind(autoOpenOutgoingToggle, { type = "toggle", key = "autoOpenOutgoing", default = DEFAULTS.autoOpenOutgoing })
   panel:bind(hideOnCombatToggle, { type = "toggle", key = "hideOnCombat", default = DEFAULTS.hideOnCombat })
   panel:bind(doubleEscapeToggle, { type = "toggle", key = "doubleEscapeToClose", default = DEFAULTS.doubleEscapeToClose })
@@ -122,6 +128,7 @@ function BehaviorSettings.Create(factory, parent, config, options)
     hideFromDefaultChatToggle.label:SetText(text("Hide whispers from default chat"))
     profanityFilterToggle.label:SetText(text("Enable profanity filter"))
     autoOpenIncomingToggle.label:SetText(text("Auto-open on incoming whisper"))
+    autoOpenIncomingOutOfCombatOnlyToggle.label:SetText(text("Only auto-open outside combat"))
     autoOpenOutgoingToggle.label:SetText(text("Auto-open on outgoing whisper"))
     doubleEscapeToggle.label:SetText(text("Double ESC to close"))
     hideOnCombatToggle.label:SetText(text("Hide on entering combat"))

@@ -45,6 +45,7 @@ return function()
     autoFocusComposer = true,
     hideFromDefaultChat = true,
     autoOpenIncoming = true,
+    autoOpenIncomingOutOfCombatOnly = false,
     autoOpenOutgoing = true,
     doubleEscapeToClose = true,
     showGroupChats = false,
@@ -102,6 +103,7 @@ return function()
   -- options scroll view to re-measure after the list grows or shrinks.
   assert(behaviorCapture.config.quickReplies == settingsConfig.quickReplies, "behavior config should carry quickReplies")
   assert(behaviorCapture.config.requestsInbox == true, "behavior config should carry requestsInbox")
+  assert(behaviorCapture.config.autoOpenIncomingOutOfCombatOnly == false, "behavior config should preserve an explicit combat-popup opt-out")
   assert(type(behaviorCapture.options.onLayoutChanged) == "function", "behavior page gets an onLayoutChanged hook")
 
   -- Appearance: bubbleColorPreset must round-trip.

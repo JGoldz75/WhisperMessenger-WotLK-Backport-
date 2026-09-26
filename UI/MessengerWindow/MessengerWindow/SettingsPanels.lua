@@ -111,6 +111,7 @@ function SettingsPanels.Create(factory, options)
         autoFocusComposer = settingsConfig.autoFocusComposer,
         hideFromDefaultChat = settingsConfig.hideFromDefaultChat,
         autoOpenIncoming = settingsConfig.autoOpenIncoming,
+        autoOpenIncomingOutOfCombatOnly = settingsConfig.autoOpenIncomingOutOfCombatOnly,
         autoOpenOutgoing = settingsConfig.autoOpenOutgoing,
         hideOnCombat = settingsConfig.hideOnCombat,
         doubleEscapeToClose = settingsConfig.doubleEscapeToClose,

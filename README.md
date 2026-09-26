@@ -14,6 +14,9 @@ is for the original client; use upstream for Retail or modern Classic clients.
   saved history, contact search, nicknames, notes, and pinned chats.
 - Character whispers and party, raid, guild, and battleground conversations.
 - Themes, the Native WoW HUD option, notifications, drafts, and quick replies.
+- Automatic opening on incoming whispers, with an **Only auto-open outside combat**
+  option under **Options > Behavior**. Combat protection is enabled by default
+  and affects the main window; small preview popups keep their existing behavior.
 - Quoted replies, reactions, typing indicators, and read receipts between players
   running compatible copies.
 - Original-client menus, clickable chat links, portable artwork, and bundled

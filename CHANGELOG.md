@@ -6,6 +6,11 @@ All releases: **2.0.x (current)** · [1.4.x](archive/changelog/1.4.md) · [1.3.x
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-09-26
+
+- New "Only auto-open outside combat" option under Options > Behavior. Enabled by default, it keeps incoming whispers from opening the main messenger window during fights when "Auto-open on incoming whisper" is turned on.
+- The combat option affects only automatic opening of the main window. Messages still arrive and remain saved; you can open the messenger manually, and small message-preview popups keep their existing behavior.
+
 ## [2.0.2] - 2026-09-26
 
 - WhisperMessenger now supports the original Wrath of the Lich King 3.3.5a client, including Frostmourne/Rebuffed.

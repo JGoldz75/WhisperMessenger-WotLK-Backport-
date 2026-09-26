@@ -22,6 +22,11 @@ files must sit directly inside that folder, without another folder in between.
 Restart the game after a first installation; `/reload` is enough for updates to
 an already discovered addon.
 
+To open the main window automatically when someone whispers you, turn on
+**Options > Behavior > Auto-open on incoming whisper**. Leave **Only auto-open
+outside combat** enabled to avoid interruptions during fights. Small message-preview
+popups keep their existing settings, and you can still open the messenger manually.
+
 ## What the port preserves
 
 - The original messenger window, themes, chat bubbles, contact search, unread

@@ -13,6 +13,7 @@ ToggleSpecs.DEFAULTS = {
   autoFocusComposer = false,
   hideFromDefaultChat = false,
   autoOpenIncoming = false,
+  autoOpenIncomingOutOfCombatOnly = true,
   autoOpenOutgoing = false,
   doubleEscapeToClose = false,
   showGroupChats = true,
@@ -89,7 +90,20 @@ function ToggleSpecs.Build(config, onChange)
       end,
       tooltipLines = {
         text("Auto-open on incoming whisper"),
-        text("Opens the messenger when you receive a whisper. Disabled during combat."),
+        text("Opens the messenger when you receive a whisper. The combat popup setting controls whether this can happen during combat."),
+      },
+    },
+    {
+      label = text("Only auto-open outside combat"),
+      initial = config.autoOpenIncomingOutOfCombatOnly ~= false,
+      onChange = function(value)
+        onChange("autoOpenIncomingOutOfCombatOnly", value)
+      end,
+      tooltipLines = {
+        text("Only auto-open outside combat"),
+        text(
+          "Prevents incoming whispers from opening the messenger during combat. You can still open it manually; message-preview popups are unchanged."
+        ),
       },
     },
     {
