@@ -5,6 +5,8 @@ end
 
 local WhisperGateway = ns.WhisperGateway or require("WhisperMessenger.Transport.WhisperGateway")
 local ChannelType = ns.ChannelType or require("WhisperMessenger.Model.Identity.ChannelType")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyChat = ns.LegacyWrathChat or require("WhisperMessenger.Core.LegacyWrath.Chat")
 
 local Gateway = {}
 
@@ -21,6 +23,9 @@ local function resolveChatSender(api)
   end
   if type(_G.C_ChatInfo) == "table" and type(_G.C_ChatInfo.SendChatMessage) == "function" then
     return _G.C_ChatInfo.SendChatMessage
+  end
+  if type(_G.SendChatMessage) == "function" then
+    return _G.SendChatMessage
   end
   return nil
 end
@@ -154,9 +159,10 @@ local senderAvailability = {
     if resolveChatSender(api) == nil then
       return false
     end
-    if type(_G.IsInGroup) == "function" then
+    local isInGroup = Compat.isLegacyWrath and LegacyChat.IsInGroup or _G.IsInGroup
+    if type(isInGroup) == "function" then
       local category = type(_G.LE_PARTY_CATEGORY_HOME) == "number" and _G.LE_PARTY_CATEGORY_HOME or 1
-      return checkMembership(_G.IsInGroup, category)
+      return checkMembership(isInGroup, category)
     end
     return true
   end,
@@ -164,11 +170,12 @@ local senderAvailability = {
     if resolveChatSender(api) == nil then
       return false
     end
-    if type(_G.IsInRaid) == "function" then
+    local isInRaid = Compat.isLegacyWrath and LegacyChat.IsInRaid or _G.IsInRaid
+    if type(isInRaid) == "function" then
       -- Home category only: instance raid groups (battlegrounds, LFR) speak
       -- INSTANCE_CHAT, not RAID — a bare IsInRaid() is true there too.
       local category = type(_G.LE_PARTY_CATEGORY_HOME) == "number" and _G.LE_PARTY_CATEGORY_HOME or 1
-      return checkMembership(_G.IsInRaid, category)
+      return checkMembership(isInRaid, category)
     end
     return true
   end,
@@ -176,9 +183,10 @@ local senderAvailability = {
     if resolveChatSender(api) == nil then
       return false
     end
-    if type(_G.IsInGroup) == "function" then
+    local isInGroup = Compat.isLegacyWrath and LegacyChat.IsInGroup or _G.IsInGroup
+    if type(isInGroup) == "function" then
       local category = type(_G.LE_PARTY_CATEGORY_INSTANCE) == "number" and _G.LE_PARTY_CATEGORY_INSTANCE or 2
-      return checkMembership(_G.IsInGroup, category)
+      return checkMembership(isInGroup, category)
     end
     return true
   end,

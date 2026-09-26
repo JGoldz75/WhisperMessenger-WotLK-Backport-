@@ -96,7 +96,7 @@ function ReactionAssets.GetBadgeOverflow()
 end
 
 ReactionAssets.KEYS = KEYS
-ReactionAssets.TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\reactions.png"
+ReactionAssets.TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\reactions.tga"
 ReactionAssets.BADGE_OFFSET_Y = 7
 
 ns.ChatBubbleReactionAssets = ReactionAssets

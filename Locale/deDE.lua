@@ -333,6 +333,7 @@ local German = {
   ["typing…"] = "schreibt…",
   ["Seen"] = "Gesehen",
   ["Uses WM"] = "Nutzt WM",
+  ["I use WhisperMessenger for whispers on original WoW 3.3.5a. Get the backport: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-"] = "Ich nutze WhisperMessenger für Flüsternachrichten im ursprünglichen WoW 3.3.5a. Download: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-",
   ["Invite to WM"] = "Zu WM einladen",
   ["Invite sent"] = "Einladung gesendet",
   ["Click to whisper this player an invite to WhisperMessenger."] = "Klicke, um diesem Spieler eine Einladung zu WhisperMessenger zuzuflüstern.",

@@ -127,7 +127,7 @@ return function()
     -- test_patch_notes_glow_matches_widget_and_minimap: same inner glow, no outer halo
     local glowTexture = glowFrame.children and glowFrame.children[1]
     assert(
-      glowTexture and glowTexture.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.png",
+      glowTexture and glowTexture.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.tga",
       case.name .. ": expected the inner-glow texture used by the widget and minimap"
     )
     assert(glowFrame.allPoints == button, case.name .. ": expected the glow pinned to the button")

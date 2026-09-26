@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 -- ReplyToLast: taint-safe /r replacement.
 -- Routes through the messenger instead of Blizzard's chatEditLastTell.
 --
@@ -45,7 +47,7 @@ function ReplyToLast.Create(deps)
 
     input:SetFocus()
 
-    local timer = _G.C_Timer
+    local timer = FlavorCompat.GetTimer()
     if type(timer) == "table" and type(timer.After) == "function" then
       timer.After(0, function()
         if input and input.SetFocus then
@@ -57,7 +59,7 @@ function ReplyToLast.Create(deps)
 
   return function()
     local function scrubLeakedR()
-      local timer = _G.C_Timer
+      local timer = FlavorCompat.GetTimer()
       if type(timer) ~= "table" or type(timer.After) ~= "function" then
         return
       end

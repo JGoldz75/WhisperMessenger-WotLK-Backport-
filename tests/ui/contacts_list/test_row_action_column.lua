@@ -86,7 +86,7 @@ return function()
   assert(unread.pinnedMarker == nil or unread.pinnedMarker.shown ~= true, "unread badge owns the corner; marker hidden")
 
   -- test_modern_remove_uses_trash_icon
-  assert(Theme.TEXTURES.trash_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\remove.png", "trash icon registered")
+  assert(Theme.TEXTURES.trash_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\remove.tga", "trash icon registered")
   assert(row.removeButton.icon.texturePath == Theme.TEXTURES.trash_icon, "modern remove uses the trash glyph")
   row.removeButton.scripts.OnEnter(row.removeButton)
   assert(sameRgb(row.removeButton.icon.vertexColor, Theme.COLORS.action_remove_hover), "trash turns danger red on hover")

@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyRoster = ns.LegacyWrathRoster or require("WhisperMessenger.Core.LegacyWrath.Roster")
 local PresenceCache = {}
 
 -- A full guild/community enumeration allocates one info table per member, so
@@ -232,6 +234,15 @@ end
 -- Rebuild. Falls back to a full rescan only when the index has never been
 -- built, or when club membership changed and the rescan interval has elapsed.
 function PresenceCache.RefreshPresence(guid)
+  if guid ~= nil and Compat.isLegacyWrath then
+    local ok, presence, zone = pcall(LegacyRoster.ReadPresence, guid)
+    if ok then
+      cache[guid] = presence
+      zoneByGuid[guid] = zone
+      freshAt[guid] = nowFn()
+    end
+    return cache[guid]
+  end
   if guid == nil or type(clubApi) ~= "table" then
     return nil
   end
@@ -253,7 +264,7 @@ end
 -- Refresh this GUID only if its last read is older than the TTL. Callers that
 -- run on every window refresh should use this instead of RefreshPresence.
 function PresenceCache.EnsureFresh(guid)
-  if guid == nil or type(clubApi) ~= "table" then
+  if guid == nil or (not Compat.isLegacyWrath and type(clubApi) ~= "table") then
     return nil
   end
 
@@ -267,6 +278,9 @@ end
 
 function PresenceCache.Invalidate()
   dirty = true
+  if Compat.isLegacyWrath then
+    freshAt = {}
+  end
 end
 
 -- Test helpers (prefixed with _ to indicate internal use)

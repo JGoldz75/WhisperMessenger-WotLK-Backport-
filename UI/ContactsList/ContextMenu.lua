@@ -3,6 +3,9 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyMenu = ns.ContactsListLegacyMenu or require("WhisperMessenger.UI.ContactsList.LegacyMenu")
+
 local Localization = ns.Localization or require("WhisperMessenger.Locale.Localization")
 local Store = ns.ConversationStore or require("WhisperMessenger.Model.ConversationStore")
 local ContactsTabFilter = ns.ContactsTabFilter or require("WhisperMessenger.UI.ContactsList.ContactsTabFilter")
@@ -37,7 +40,8 @@ end
 -- Checkbox (plain button on clients without one) shown only for friends
 -- whose online state WoW reports.
 local function addNotifyOnlineEntry(rootDescription, item, onUpdatePrefs)
-  if not OnlineWatch.CanWatch(item, _G.C_FriendList) then
+  local friends = FlavorCompat.GetFriendListApi and FlavorCompat.GetFriendListApi() or _G.C_FriendList
+  if not OnlineWatch.CanWatch(item, friends) then
     return
   end
   local label = Localization.Text("Notify when online")
@@ -159,6 +163,25 @@ end
 function ContextMenu.Open(item, anchorFrame, onMarkUnread, onUpdatePrefs)
   if type(item) ~= "table" then
     return false
+  end
+  if FlavorCompat.isLegacyWrath then
+    local isGroup = ContactsTabFilter.IsGroupChannel(item.channel)
+    local opened = LegacyMenu.Open(anchorFrame, function(root)
+      local name = resolveMenuName(item)
+      if name then
+        root:CreateTitle(name)
+      end
+      addMarkUnreadButton(root, item, onMarkUnread)
+      addPrefsButtons(root, item, onUpdatePrefs, isGroup)
+      if not isGroup and name and type(_G.FriendsFrame_ShowDropdown) == "function" then
+        root:CreateButton(_G.PLAYER or "Player", function()
+          _G.FriendsFrame_ShowDropdown(name, 1, item.lineID, item.chatType, anchorFrame)
+        end)
+      end
+    end)
+    if opened then
+      return true
+    end
   end
   if ContactsTabFilter.IsGroupChannel(item.channel) then
     return openGroupMenu(item, anchorFrame, onMarkUnread, onUpdatePrefs)

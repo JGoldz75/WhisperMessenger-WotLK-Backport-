@@ -333,6 +333,7 @@ local SimplifiedChinese = {
   ["typing…"] = "正在输入…",
   ["Seen"] = "已读",
   ["Uses WM"] = "使用 WM",
+  ["I use WhisperMessenger for whispers on original WoW 3.3.5a. Get the backport: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-"] = "我在原版 WoW 3.3.5a 用 WhisperMessenger 聊密语。下载移植版：https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-",
   ["Invite to WM"] = "邀请使用 WM",
   ["Invite sent"] = "邀请已发送",
   ["Click to whisper this player an invite to WhisperMessenger."] = "点击向该玩家发送密语，邀请其使用 WhisperMessenger。",

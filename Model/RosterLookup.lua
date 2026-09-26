@@ -4,6 +4,8 @@ if type(ns) ~= "table" then
 end
 
 local Identity = ns.Identity or require("WhisperMessenger.Model.Identity")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyRoster = ns.LegacyWrathRoster or require("WhisperMessenger.Core.LegacyWrath.Roster")
 
 -- Finds a guild or community member's GUID by character name. Used when a
 -- whisper fails and the game never sent the target's GUID.
@@ -42,6 +44,9 @@ end
 
 -- The subscribed clubs include the guild.
 function RosterLookup.FindGUIDByName(api, name)
+  if Compat.isLegacyWrath then
+    return LegacyRoster.FindGUIDByName(name)
+  end
   if type(api) ~= "table" or type(api.GetSubscribedClubs) ~= "function" or name == nil then
     return nil
   end

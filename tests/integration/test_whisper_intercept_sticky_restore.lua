@@ -3,8 +3,9 @@ local FindUI = require("tests.helpers.find_ui")
 
 local function loadAddonFromToc(addonName, ns)
   for line in io.lines("WhisperMessenger.toc") do
+    line = line:match("^%s*(.-)%s*$")
     if line ~= "" and string.sub(line, 1, 2) ~= "##" and not string.match(line, "%.xml$") then
-      local chunk = assert(loadfile(line))
+      local chunk = assert(loadfile((line:gsub("\\", "/"))))
       chunk(addonName, ns)
     end
   end

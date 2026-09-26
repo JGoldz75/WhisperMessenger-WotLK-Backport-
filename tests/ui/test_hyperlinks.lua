@@ -61,18 +61,17 @@ return function()
       { key = "pray", left = 812, right = 884, top = 156, bottom = 228 },
       { key = "skull", left = 924, right = 996, top = 156, bottom = 228 },
     }
-    local atlas, openError = io.open("Media/reactions.png", "rb")
-    local ihdr = atlas and atlas:read(26)
+    local atlas, openError = io.open("Media/reactions.tga", "rb")
+    local header = atlas and atlas:read(18)
     local closeOk = atlas and atlas:close()
     assert(atlas ~= nil, "reaction atlas should be readable: " .. tostring(openError))
-    assert(closeOk, "reaction atlas should close after reading IHDR")
-    assert(ihdr and #ihdr == 26, "reaction atlas should contain a complete IHDR")
-    assert(string.sub(ihdr, 1, 8) == "\137PNG\r\n\26\n", "reaction atlas should have a PNG signature")
-    assert(string.sub(ihdr, 9, 16) == "\0\0\0\rIHDR", "reaction atlas should begin with an IHDR chunk")
-    local width = string.byte(ihdr, 17) * 0x1000000 + string.byte(ihdr, 18) * 0x10000 + string.byte(ihdr, 19) * 0x100 + string.byte(ihdr, 20)
-    local height = string.byte(ihdr, 21) * 0x1000000 + string.byte(ihdr, 22) * 0x10000 + string.byte(ihdr, 23) * 0x100 + string.byte(ihdr, 24)
-    assert(width == 1024 and height == 256, "reaction atlas IHDR should be 1024x256")
-    assert(string.byte(ihdr, 25) == 8 and string.byte(ihdr, 26) == 6, "reaction atlas should be 8-bit RGBA")
+    assert(closeOk, "reaction atlas should close after reading its header")
+    assert(header and #header == 18, "reaction atlas should contain a complete TGA header")
+    assert(string.byte(header, 3) == 2, "original Wrath requires an uncompressed truecolor TGA")
+    local width = string.byte(header, 13) + string.byte(header, 14) * 256
+    local height = string.byte(header, 15) + string.byte(header, 16) * 256
+    assert(width == 1024 and height == 256, "reaction atlas should be 1024x256")
+    assert(string.byte(header, 17) == 32 and string.byte(header, 18) % 16 == 8, "reaction atlas needs 8-bit alpha")
 
     for _, region in ipairs(expectedRegions) do
       local coords = ReactionAssets.GetTexCoords(region.key)
@@ -87,7 +86,7 @@ return function()
       assert(
         Hyperlinks.FormatTextForDisplay(":" .. region.key .. ":")
           == string.format(
-            "|TInterface\\AddOns\\WhisperMessenger\\Media\\reactions.png:12:12:0:0:1024:256:%d:%d:%d:%d|t",
+            "|TInterface\\AddOns\\WhisperMessenger\\Media\\reactions.tga:12:12:0:0:1024:256:%d:%d:%d:%d|t",
             region.left,
             region.right,
             region.top,
@@ -97,7 +96,7 @@ return function()
       )
     end
 
-    local heartSprite = "|TInterface\\AddOns\\WhisperMessenger\\Media\\reactions.png:12:12:0:0:1024:256:28:100:28:100|t"
+    local heartSprite = "|TInterface\\AddOns\\WhisperMessenger\\Media\\reactions.tga:12:12:0:0:1024:256:28:100:28:100|t"
     assert(Hyperlinks.FormatTextForDisplay("nice :heart:") == "nice " .. heartSprite, "known emoji token should render as a heart sprite")
     assert(Hyperlinks.FormatTextForDisplay("keep :rocket: literal") == "keep :rocket: literal", "unknown emoji token should remain literal")
 

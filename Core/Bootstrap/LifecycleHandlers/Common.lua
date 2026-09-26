@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Localization = ns.Localization or (type(require) == "function" and require("WhisperMessenger.Locale.Localization")) or nil
 local function L(key)
   return Localization and Localization.Text(key) or key
@@ -19,8 +21,8 @@ function Common.refreshRuntimeWindow(Bootstrap)
 end
 
 function Common.scheduleAfter(delay, callback)
-  if type(_G.C_Timer) == "table" and type(_G.C_Timer.After) == "function" then
-    _G.C_Timer.After(delay, callback)
+  if type(FlavorCompat.GetTimer()) == "table" and type(FlavorCompat.GetTimer().After) == "function" then
+    FlavorCompat.GetTimer().After(delay, callback)
     return true
   end
 

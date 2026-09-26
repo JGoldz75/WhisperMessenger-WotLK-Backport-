@@ -19,6 +19,26 @@ if type(_G["GetBuildInfo"]) == "function" then
   tocVersion = select(4, _G["GetBuildInfo"]())
 end
 FlavorCompat.isForever = type(tocVersion) == "number" and tocVersion >= FOREVER_TOC_MIN and tocVersion < FOREVER_TOC_MAX
+FlavorCompat.isLegacyWrath = tocVersion == 30300
+
+local legacyTimer
+function FlavorCompat.GetTimer()
+  if type(_G.C_Timer) == "table" then
+    return _G.C_Timer
+  end
+  if not FlavorCompat.isLegacyWrath or type(_G.CreateFrame) ~= "function" then
+    return nil
+  end
+  if not legacyTimer then
+    local Timer = ns.LegacyWrathTimer or require("WhisperMessenger.Core.LegacyWrath.Timer")
+    legacyTimer = Timer.New(_G.CreateFrame, function(err)
+      if type(_G.geterrorhandler) == "function" then
+        _G.geterrorhandler()(err)
+      end
+    end)
+  end
+  return legacyTimer
+end
 
 -- Feature flags — true only on flavors that support the feature
 FlavorCompat.hasMythicPlus = FlavorCompat.isRetail and not FlavorCompat.isForever

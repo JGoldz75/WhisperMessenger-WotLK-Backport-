@@ -3,6 +3,7 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local Base = ns.UIHelpersBase or require("WhisperMessenger.UI.Helpers.Base")
 local WindowResize = {}
 
 local function effectiveScaleOrOne(target)
@@ -39,11 +40,11 @@ function WindowResize.New(options)
       right = windowResizePreviewHost:CreateTexture(nil, "OVERLAY"),
     }
 
-    windowResizePreview.bg:SetColorTexture(fillColor[1], fillColor[2], fillColor[3], options.previewFillAlpha)
-    windowResizePreview.top:SetColorTexture(dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha)
-    windowResizePreview.bottom:SetColorTexture(dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha)
-    windowResizePreview.left:SetColorTexture(dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha)
-    windowResizePreview.right:SetColorTexture(dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha)
+    Base.applyColorTexture(windowResizePreview.bg, { fillColor[1], fillColor[2], fillColor[3], options.previewFillAlpha })
+    Base.applyColorTexture(windowResizePreview.top, { dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha })
+    Base.applyColorTexture(windowResizePreview.bottom, { dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha })
+    Base.applyColorTexture(windowResizePreview.left, { dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha })
+    Base.applyColorTexture(windowResizePreview.right, { dividerColor[1], dividerColor[2], dividerColor[3], options.previewBorderAlpha })
 
     if resizeGrip then
       resizeGrip.preview = windowResizePreview

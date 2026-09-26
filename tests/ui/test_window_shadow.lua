@@ -2,7 +2,7 @@ local FakeUI = require("tests.helpers.fake_ui")
 local Theme = require("WhisperMessenger.UI.Theme")
 local ModernChrome = require("WhisperMessenger.UI.MessengerWindow.ChromeBuilder.ModernChrome")
 
-local SHADOW_PATH = "Interface\\AddOns\\WhisperMessenger\\Media\\shadow.png"
+local SHADOW_PATH = "Interface\\AddOns\\WhisperMessenger\\Media\\shadow.tga"
 
 local function build()
   local factory = FakeUI.NewFactory()

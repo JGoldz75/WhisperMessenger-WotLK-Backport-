@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local LegacyUI = ns.LegacyWrathUI or require("WhisperMessenger.Core.LegacyWrath.UI")
+
 local DataBroker = {}
 
 --- Build the display text for the LDB launcher.
@@ -41,7 +43,7 @@ function DataBroker.Register(options)
     -- happen by assigning ldb.text directly from refreshContacts.
     local dataobj = ldb:NewDataObject("WhisperMessenger", {
       type = "launcher",
-      icon = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.png",
+      icon = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.tga",
       label = "Whisper Messenger",
       text = "Whisper Messenger",
       OnClick = function(_)
@@ -75,7 +77,7 @@ function DataBroker.Register(options)
   end
 
   if not tryRegister() and type(_G.CreateFrame) == "function" then
-    local loginFrame = _G.CreateFrame("Frame")
+    local loginFrame = LegacyUI.CreateFrame("Frame")
     loginFrame:RegisterEvent("PLAYER_LOGIN")
     loginFrame:SetScript("OnEvent", function()
       tryRegister()

@@ -8,7 +8,7 @@ import sys
 import os
 
 try:
-    from lupa import LuaRuntime
+    from lupa.lua51 import LuaRuntime
 except ImportError:
     print("ERROR: lupa is not installed. Run: pip install lupa", file=sys.stderr)
     sys.exit(1)

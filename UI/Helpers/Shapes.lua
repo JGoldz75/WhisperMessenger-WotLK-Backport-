@@ -3,6 +3,7 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
 local Base = ns.UIHelpersBase or require("WhisperMessenger.UI.Helpers.Base")
 
 local Shapes = {}
@@ -177,18 +178,20 @@ end
 -- Resize an icon built by createCircularIcon (frame + zoomed masked texture).
 function Shapes.resizeCircularIcon(frame, texture, size)
   frame:SetSize(size, size)
-  local zoom = math.floor(size * ICON_ZOOM + 0.5)
+  local zoom = math.floor(size * (FlavorCompat.isLegacyWrath and 1 or ICON_ZOOM) + 0.5)
   texture:SetSize(zoom, zoom)
 end
 
 function Shapes.createCircularIcon(factory, parent, size)
   local frame = factory.CreateFrame("Frame", nil, parent)
   frame:SetSize(size, size)
-  if frame.SetClipsChildren then
+  -- Legacy compatibility providers emulate clipping by reparenting and
+  -- snapshotting geometry; that breaks later anchors and window resizing.
+  if not FlavorCompat.isLegacyWrath and frame.SetClipsChildren then
     frame:SetClipsChildren(true)
   end
 
-  local zoom = math.floor(size * ICON_ZOOM + 0.5)
+  local zoom = math.floor(size * (FlavorCompat.isLegacyWrath and 1 or ICON_ZOOM) + 0.5)
   -- Cache the texture on the frame. The factory may be pooled (chat-bubble
   -- icons reuse frames across renders), and WoW cannot GC textures parented
   -- to a frame — creating a new one each render leaks indefinitely.
@@ -255,7 +258,7 @@ function Shapes.createRoundedBackground(frame, cornerRadius, drawLayer, subLayer
     c:SetSize(r, r)
     c:SetPoint(point, frame, point, 0, 0)
     if c.SetTexture then
-      c:SetTexture(ROUNDED_CIRCLE_TEX)
+      c:SetTexture(FlavorCompat.isLegacyWrath and "Interface\\AddOns\\WhisperMessenger\\Media\\circle.tga" or ROUNDED_CIRCLE_TEX)
     end
     return c
   end

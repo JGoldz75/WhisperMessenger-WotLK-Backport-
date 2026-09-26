@@ -26,6 +26,11 @@ local function loadFlavorCompat(projectId, tocVersion)
 end
 
 return function()
+  local wrath = loadFlavorCompat(nil, 30300)
+  assert(wrath.isLegacyWrath == true, "original 3.3.5 must use legacy adapters")
+  assert(wrath.hasMythicPlus == false)
+  local wrathClassic = loadFlavorCompat(11, 30403)
+  assert(wrathClassic.isLegacyWrath == false, "Wrath Classic is a different API generation")
   -- Forever: retail engine (project 1) + toc 16001
   local forever = loadFlavorCompat(1, 16001)
   assert(forever.isForever == true, "toc 16001 should be Forever")

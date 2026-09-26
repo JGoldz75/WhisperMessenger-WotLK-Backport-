@@ -333,6 +333,7 @@ local Russian = {
   ["typing…"] = "печатает…",
   ["Seen"] = "Просмотрено",
   ["Uses WM"] = "Использует WM",
+  ["I use WhisperMessenger for whispers on original WoW 3.3.5a. Get the backport: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-"] = "Я использую WhisperMessenger для шёпота в оригинальном WoW 3.3.5a. Скачать: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-",
   ["Invite to WM"] = "Пригласить в WM",
   ["Invite sent"] = "Приглашение отправлено",
   ["Click to whisper this player an invite to WhisperMessenger."] = "Нажмите, чтобы шепнуть этому игроку приглашение в WhisperMessenger.",

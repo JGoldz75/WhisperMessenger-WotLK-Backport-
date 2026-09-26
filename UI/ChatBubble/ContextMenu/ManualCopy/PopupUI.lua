@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local PopupUI = {}
 local StyledTextInputPopup = ns.StyledTextInputPopup or require("WhisperMessenger.UI.Shared.StyledTextInputPopup")
 local Resolvers = ns.ChatBubbleContextMenuManualCopyPopupUIResolvers
@@ -40,7 +42,7 @@ local function isFrameShown(frame)
 end
 
 local function scheduleManualCopyRefocus(dialog, text, delaySeconds)
-  _G.C_Timer.After(delaySeconds, function()
+  FlavorCompat.GetTimer().After(delaySeconds, function()
     if isFrameShown(dialog) then
       Resolvers.primePopupEditBox(dialog, text, MANUAL_COPY_DIALOG_NAME)
     end
@@ -100,7 +102,8 @@ function PopupUI.ShowManualCopyDialog(text)
     minInputWidth = 260,
   })
 
-  if type(_G.C_Timer) == "table" and type(_G.C_Timer.After) == "function" then
+  local timer = FlavorCompat.GetTimer()
+  if type(timer) == "table" and type(timer.After) == "function" then
     scheduleManualCopyRefocus(dialog, text, 0)
     scheduleManualCopyRefocus(dialog, text, 0.05)
   end

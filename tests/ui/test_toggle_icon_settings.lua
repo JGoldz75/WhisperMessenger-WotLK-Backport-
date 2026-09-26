@@ -121,7 +121,7 @@ return function()
     })
 
     assert(
-      icon.label.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\icon.png",
+      icon.label.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\icon.tga",
       "test_icon_uses_addon_logo_texture: foreground should use addon icon texture, got " .. tostring(icon.label.texturePath)
     )
   end

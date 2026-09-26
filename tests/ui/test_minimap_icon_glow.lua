@@ -1,7 +1,7 @@
 local FakeUI = require("tests.helpers.fake_ui")
 local MinimapIcon = require("WhisperMessenger.UI.MinimapIcon.MinimapIcon")
 
-local INNER_GLOW_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.png"
+local INNER_GLOW_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.tga"
 
 -- Factory whose frames record the animation kinds their groups create.
 local function newAnimatedFactory()

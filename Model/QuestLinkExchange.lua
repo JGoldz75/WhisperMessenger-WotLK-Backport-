@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 -- Side-channel for quest links over character whispers.
 --
 -- Background: WoW Classic's character-whisper protocol strips both the
@@ -17,7 +19,7 @@ end
 
 local QuestLinkExchange = {}
 
-local MAX_PAYLOAD_BYTES = 255
+local MAX_PAYLOAD_BYTES = FlavorCompat.isLegacyWrath and 250 or 255
 local INBOX_TTL_SECONDS = 15
 
 local QUEST_LINK_HYPERLINK_PATTERN = "|Hquest:(%d+)[^|]*|h%[([^%]]+)%]|h"
@@ -135,7 +137,7 @@ local function scheduleCleanup(state, recordedAt)
     return
   end
 
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if type(timer) ~= "table" or type(timer.After) ~= "function" then
     return
   end

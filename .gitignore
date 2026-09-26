@@ -10,3 +10,8 @@ docs/
 .tmp_luals/
 __pycache__/
 /CLAUDE.md
+
+/verification-results.json
+/lint-results.txt
+/texture-audit/
+/class-icon-inspection.png

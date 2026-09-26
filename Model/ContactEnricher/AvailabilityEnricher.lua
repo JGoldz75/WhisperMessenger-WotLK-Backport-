@@ -7,6 +7,8 @@ local WoWStatus = ns.ContactEnricherWoWStatus or require("WhisperMessenger.Model
 local BNetStatus = ns.ContactEnricherBNetStatus or require("WhisperMessenger.Model.ContactEnricher.BNetStatus")
 local OnlineWatch = ns.OnlineWatch or require("WhisperMessenger.Model.OnlineWatch")
 local Store = ns.ConversationStore or require("WhisperMessenger.Model.ConversationStore")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local PresenceCache = ns.PresenceCache or require("WhisperMessenger.Model.PresenceCache")
 
 local AvailabilityEnricher = {}
 
@@ -58,7 +60,9 @@ end
 function AvailabilityEnricher.EnrichContactsAvailability(contacts, runtime)
   local Availability = ns.Availability or require("WhisperMessenger.Transport.Availability")
   for _, item in ipairs(contacts) do
-    if item.guid and runtime.availabilityByGUID[item.guid] then
+    if Compat.isLegacyWrath and item.channel ~= "BN" and PresenceCache.GetPresence(item.guid) == "offline" then
+      item.availability = Availability.FromStatus("Offline")
+    elseif item.guid and runtime.availabilityByGUID[item.guid] then
       WoWStatus.ApplyCached(item, runtime)
     elseif item.guid and item.channel ~= "BN" then
       WoWStatus.ApplyPresenceFallback(item, runtime)
@@ -67,7 +71,7 @@ function AvailabilityEnricher.EnrichContactsAvailability(contacts, runtime)
       WoWStatus.ApplyZone(item)
     end
     -- WoW contacts with no availability after all checks: default to Offline
-    if item.availability == nil and item.channel ~= "BN" then
+    if item.availability == nil and item.channel ~= "BN" and not Compat.isLegacyWrath then
       item.availability = Availability.FromStatus("Offline")
     end
     -- BNet contacts: query live status and refresh metadata from BNet API

@@ -54,6 +54,9 @@ function Bootstrap.Initialize(factory, options)
   local WindowScale = loadModule("WhisperMessenger.UI.MessengerWindow.WindowScale", "MessengerWindowWindowScale")
 
   local uiFactory = factory or _G
+  if ns.LegacyWrathUI and ns.FlavorCompat and ns.FlavorCompat.isLegacyWrath then
+    uiFactory = ns.LegacyWrathUI.WrapFactory(uiFactory)
+  end
   local localProfileId = RuntimeFactory.ResolveLocalProfileId(options)
   local accountState, characterState = SavedState.Initialize(options.accountState, options.characterState, localProfileId)
   accountState.settings = accountState.settings or {}

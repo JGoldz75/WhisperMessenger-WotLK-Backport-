@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 -- stylua: ignore start
 local ConversationOps = ns.BootstrapAutoOpenConversationOps or require("WhisperMessenger.Core.Bootstrap.AutoOpenCoordinator.ConversationOps")
 local EditBoxInterop = ns.BootstrapAutoOpenEditBoxInterop or require("WhisperMessenger.Core.Bootstrap.AutoOpenCoordinator.EditBoxInterop")
@@ -118,7 +120,7 @@ function DirectHooks.Install(runtime, hooks, deps)
       -- Defer editbox cleanup to next frame to avoid tainting secure chat
       -- frame state. Writing to editbox attributes during a hooksecurefunc
       -- callback can taint them, causing WoW to fail on subsequent calls.
-      local timer = _G.C_Timer
+      local timer = FlavorCompat.GetTimer()
       if type(timer) == "table" and type(timer.After) == "function" then
         timer.After(0, function()
           -- Re-check at fire time: ENCOUNTER_START may have activated between

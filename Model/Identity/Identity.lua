@@ -4,6 +4,8 @@ if type(ns) ~= "table" then
 end
 
 local Factions = ns.IdentityFactions or require("WhisperMessenger.Model.Identity.Factions")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyChat = ns.LegacyWrathChat or require("WhisperMessenger.Core.LegacyWrath.Chat")
 
 local Identity = {}
 
@@ -65,6 +67,9 @@ end
 
 function Identity.FromWhisper(fullName, guid, playerInfo)
   playerInfo = playerInfo or {}
+  if Compat.isLegacyWrath then
+    fullName = LegacyChat.LocalName(fullName)
+  end
   -- Detaint the name once; normalizeName handles nil but displayName needs a clean copy too.
   fullName = Identity.ShortName(fullName)
   return {
@@ -143,6 +148,9 @@ end
 function Identity.ResolveWhisperConversation(runtime, target, channel)
   local store = runtime and runtime.store
   local conversations = store and store.conversations
+  if channel == "WOW" and Compat.isLegacyWrath then
+    target = LegacyChat.LocalName(target)
+  end
   local targetCanonical = normalizedValue(target)
   if type(conversations) ~= "table" or targetCanonical == "" then
     return nil
@@ -150,7 +158,11 @@ function Identity.ResolveWhisperConversation(runtime, target, channel)
 
   if channel == "WOW" then
     local exactKey = findUniqueConversation(conversations, "WOW", function(conversation)
-      return normalizedValue(conversationDisplayName(conversation)) == targetCanonical
+      local name = conversationDisplayName(conversation)
+      if Compat.isLegacyWrath then
+        name = LegacyChat.LocalName(name)
+      end
+      return normalizedValue(name) == targetCanonical
     end)
     if exactKey ~= nil then
       return exactKey

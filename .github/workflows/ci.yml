@@ -2,9 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, main]
   pull_request:
-    branches: [master]
+    branches: [master, main]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -14,27 +19,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run StyLua
-        run: npx --yes @johnnymorganz/stylua-bin@2.5.2 --check .
-
-      - name: Run Luacheck
-        uses: lunarmodules/luacheck@v1
+      - name: Install lint tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends lua5.1 liblua5.1-0-dev luarocks
+          sudo luarocks --lua-version=5.1 install luacheck 1.2.0-1
+          npm install --global @johnnymorganz/stylua-bin@2.5.2
+      - name: Run project lint checks
+        run: bash scripts/lint.sh
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run release script tests
-        run: python -m unittest tests.scripts.test_gen_patch_notes tests.scripts.test_promote_changelog
-
-      - name: Install Lua
+      - name: Run release and packaging script tests
+        run: python -m unittest discover -s tests/scripts -p 'test_*.py'
+      - name: Install the original client Lua runtime
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends lua5.1
-
-      - name: Run tests
+      - name: Run every Lua test recursively
+        shell: bash
         run: |
-          for f in tests/**/*.lua; do
-            lua5.1 tests/run.lua "$f"
-          done
+          set -euo pipefail
+          while IFS= read -r -d '' test_file; do
+            lua5.1 tests/run.lua "${test_file}"
+          done < <(find tests -type f -name 'test_*.lua' -print0 | sort -z)
+      - name: Build installable WotLK package
+        run: python scripts/package_wotlk.py
+      - name: Upload installable WotLK package
+        uses: actions/upload-artifact@v4
+        with:
+          name: WhisperMessenger-WotLK-CI-${{ github.run_number }}
+          path: dist/*.zip
+          if-no-files-found: error

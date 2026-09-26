@@ -20,6 +20,7 @@ local GroupMembership = ns.BootstrapLifecycleHandlersGroupMembership
   or nil
 local OnlineNotify = ns.BootstrapLifecycleHandlersOnlineNotify or require("WhisperMessenger.Core.Bootstrap.LifecycleHandlers.OnlineNotify")
 local MessageReactions = ns.MessageReactions or require("WhisperMessenger.Model.MessageReactions")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
 
 local LifecycleHandlers = {}
 
@@ -34,6 +35,9 @@ function LifecycleHandlers.Handle(Bootstrap, event, deps, ...)
   end
 
   if event == "FRIENDLIST_UPDATE" then
+    if Compat.isLegacyWrath and deps and type(deps.getPresenceCache) == "function" then
+      Presence.handlePresenceInvalidation(Bootstrap, deps)
+    end
     return OnlineNotify.handleFriendListUpdate(Bootstrap)
   end
 
@@ -63,7 +67,7 @@ function LifecycleHandlers.Handle(Bootstrap, event, deps, ...)
     return GroupMembership.handleGroupLeft(Bootstrap, category, partyGUID)
   end
 
-  if event == "GROUP_ROSTER_UPDATE" then
+  if event == "GROUP_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" or event == "RAID_ROSTER_UPDATE" then
     return GroupMembership.handleGroupRosterUpdate(Bootstrap)
   end
 

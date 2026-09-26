@@ -1,0 +1,7 @@
+WhisperMessenger original Wrath class artwork
+
+Source: the existing individual Blizzard ClassIcon textures supplied with the local
+Frostmourne/Rebuffed client at Interface/ICONS/ClassIcon_<Class>.blp.
+World of Warcraft artwork belongs to Blizzard Entertainment.
+Converted losslessly to uncompressed RGBA TGA for original-client compatibility.
+No artwork was taken from another addon.

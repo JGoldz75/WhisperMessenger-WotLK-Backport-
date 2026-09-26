@@ -19,6 +19,9 @@ ignore:
   - README.md
   - CHANGELOG.md
   - entities.json
+  - README-WOTLK.md
+  - verification-results.json
+  - lint-results.txt
   - mempalace.yaml
   - Model/ContactEnricher/init.lua
   - Model/Identity/init.lua

@@ -3,6 +3,7 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local LegacyEvents = ns.LegacyWrathEvents or require("WhisperMessenger.Core.LegacyWrath.Events")
 local EventUtils = {}
 
 -- RegisterEvent throws "Attempt to register unknown event ..." on clients that
@@ -14,14 +15,16 @@ function EventUtils.IsUnknownEventError(err)
 end
 
 function EventUtils.RegisterEventIfSupported(frame, eventName)
-  local ok, err = pcall(frame.RegisterEvent, frame, eventName)
-  if ok then
-    return true
+  local registered = false
+  for _, name in ipairs(LegacyEvents.ResolveNames(eventName)) do
+    local ok, err = pcall(frame.RegisterEvent, frame, name)
+    if ok then
+      registered = true
+    elseif not EventUtils.IsUnknownEventError(err) then
+      error(err)
+    end
   end
-  if EventUtils.IsUnknownEventError(err) then
-    return false
-  end
-  error(err)
+  return registered
 end
 
 ns.EventUtils = EventUtils

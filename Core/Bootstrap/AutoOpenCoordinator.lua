@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 -- stylua: ignore start
 local AutoOpenHooks = ns.BootstrapAutoOpenHooks or require("WhisperMessenger.Core.Bootstrap.AutoOpenHooks")
 local Identity = ns.Identity or require("WhisperMessenger.Model.Identity")
@@ -25,7 +27,7 @@ local function focusComposer(runtime)
   -- OnShow → refreshWindow → strata promotion, any of which can steal
   -- focus before the frame has finished laying out. Reissuing once the
   -- layout settles makes the reply flow land on the input consistently.
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if type(timer) == "table" and type(timer.After) == "function" then
     timer.After(0, function()
       if input and input.SetFocus then
@@ -118,7 +120,7 @@ function AutoOpenCoordinator.Attach(options)
   end
 
   function controller.installDeferredPoller()
-    local timer = options.C_Timer or _G.C_Timer
+    local timer = options.C_Timer or FlavorCompat.GetTimer()
     if not runtime.autoOpenHooks or type(timer) ~= "table" or type(timer.After) ~= "function" then
       return
     end

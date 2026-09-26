@@ -35,6 +35,8 @@ function Base.applyColorTexture(region, colorTable)
   end
   if region.SetColorTexture then
     region:SetColorTexture(colorTable[1], colorTable[2], colorTable[3], colorTable[4] or 1)
+  elseif region.SetTexture then
+    region:SetTexture(colorTable[1], colorTable[2], colorTable[3], colorTable[4] or 1)
   end
 end
 
@@ -54,11 +56,16 @@ end
 -- (vertex colours multiply the base), so if the gradient is unsupported or
 -- dropped the worst case is the flat intended colour, never opaque white.
 local function applyAlphaGradient(texture, orientation, color, minAlpha, maxAlpha)
-  if not texture or not texture.SetColorTexture then
+  if not texture then
+    return
+  end
+  if texture.SetGradientAlpha then
+    Base.applyColorTexture(texture, { 1, 1, 1, 1 })
+    texture:SetGradientAlpha(orientation, color[1], color[2], color[3], minAlpha, color[1], color[2], color[3], maxAlpha)
     return
   end
   local peak = math.max(minAlpha, maxAlpha)
-  texture:SetColorTexture(color[1], color[2], color[3], peak)
+  Base.applyColorTexture(texture, { color[1], color[2], color[3], peak })
   local createColor = _G.CreateColor
   if peak <= 0 or not texture.SetGradient or type(createColor) ~= "function" then
     return

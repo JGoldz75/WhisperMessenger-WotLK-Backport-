@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local ReactionAssets = ns.ChatBubbleReactionAssets or require("WhisperMessenger.UI.ChatBubble.ReactionAssets")
@@ -217,7 +219,7 @@ function IncomingPreview.Create(factory, frame, options)
     if not seconds or seconds <= 0 then
       return
     end
-    local cTimer = _G.C_Timer
+    local cTimer = FlavorCompat.GetTimer()
     if type(cTimer) ~= "table" or type(cTimer.NewTimer) ~= "function" then
       return
     end

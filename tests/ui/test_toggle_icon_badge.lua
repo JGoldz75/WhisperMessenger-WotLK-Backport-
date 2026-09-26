@@ -34,7 +34,7 @@ return function()
   local innerGlow = nil
   for _, child in ipairs(icon.frame.children) do
     for _, region in ipairs(child.children or {}) do
-      if region.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.png" then
+      if region.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.tga" then
         innerGlow = child
       end
     end

@@ -9,19 +9,19 @@ local Textures = {
   faction_horde = "Interface\\ICONS\\PVPCurrency-Honor-Horde",
   bnet_icon = "Interface\\FriendsFrame\\UI-Toast-ChatInviteIcon",
   -- Pin glyphs (bundled, white on transparent; tinted at runtime).
-  pin_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\pin.png",
-  unpin_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\unpin.png",
-  pinned_marker = "Interface\\AddOns\\WhisperMessenger\\Media\\pinned.png",
-  trash_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\remove.png",
+  pin_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\pin.tga",
+  unpin_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\unpin.tga",
+  pinned_marker = "Interface\\AddOns\\WhisperMessenger\\Media\\pinned.tga",
+  trash_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\remove.tga",
   -- Title-bar line icons (white on transparent; tinted at runtime).
-  title_close_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\close.png",
-  title_settings_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\settings.png",
-  title_back_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\back.png",
-  title_new_whisper_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\new_whisper.png",
-  title_whats_new_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\whats_new.png",
-  title_mark_read_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\mark_read.png",
-  quick_reply_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\quick_reply.png",
-  muted_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\muted.png",
+  title_close_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\close.tga",
+  title_settings_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\settings.tga",
+  title_back_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\back.tga",
+  title_new_whisper_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\new_whisper.tga",
+  title_whats_new_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\whats_new.tga",
+  title_mark_read_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\mark_read.tga",
+  quick_reply_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\quick_reply.tga",
+  muted_icon = "Interface\\AddOns\\WhisperMessenger\\Media\\muted.tga",
 }
 
 -- Class tokens with a matching ClassIcon_* texture. Unknown tags must

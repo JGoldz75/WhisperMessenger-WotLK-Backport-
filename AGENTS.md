@@ -1,12 +1,12 @@
 # WhisperMessenger
 
-Messenger-style whisper UI addon for World of Warcraft: Retail, the Classic flavors (Vanilla, TBC, Wrath, Cata, Mists) and WoW: Forever. One TOC (`WhisperMessenger.toc`) carries every flavor's `## Interface-*` line.
+This fork backports F0rty-Tw0's messenger-style whisper UI to the original World of Warcraft Wrath of the Lich King 3.3.5a client (build 12340). `WhisperMessenger.toc` must keep `## Interface: 30300` and backslash-separated runtime paths. Keep the installed folder name `WhisperMessenger`. Upstream multi-client history and tests are retained, but this fork packages the original Wrath target only.
 
 ## Tech Stack
 
 - **Lua 5.1** (WoW runtime) — no Lua 5.2+ features (no `goto`, no `table.unpack` without compat)
 - **WoW API** — Blizzard's frame/widget system, C\_ namespaced APIs
-- **Flavor differences** go through `Core/FlavorCompat.lua` — never assume a Retail-only API exists
+- **Flavor differences** go through `Core/FlavorCompat.lua` and the private `Core/LegacyWrath/` adapters — never assume a Retail-only API exists or replace another addon's global compatibility provider
 - **StyLua** — formatter (`stylua.toml`)
 - **Luacheck** — static analysis (`.luacheckrc`)
 
@@ -51,13 +51,13 @@ python scripts/run_test.py tests/path/to/test_file.lua
 Tests run with plain Lua — no WoW runtime needed. WoW APIs are stubbed via `tests/helpers/fake_ui.lua` and the `tests/helpers/fake_ui/` folder. Run all tests:
 
 ```bash
-for f in tests/**/*.lua; do python scripts/run_test.py "$f"; done
+python scripts/verify_wotlk.py
 
 # Release script tests (Python):
 python -m unittest tests.scripts.test_gen_patch_notes tests.scripts.test_promote_changelog
 ```
 
-The release pipeline minifies the shipped Lua and runs every test again on the minified code, so neither code nor tests may depend on comments or exact source formatting.
+CI runs the complete Lua 5.1 suite and the strict original-client simulation, then builds the runtime ZIP with `scripts/package_wotlk.py`. Tests run on both Windows and Linux; normalize TOC paths only when opening files in test tooling, never in the shipped manifest. Do not add local diagnostic captures, extracted client archives, saved variables, credentials, or private paths to commits.
 
 ## Development Workflow — TDD (Red-Green-Refactor)
 
@@ -110,7 +110,7 @@ Rules:
 
 ## Changelog
 
-`CHANGELOG.md` is **player-facing release notes**, not an engineering log. The audience is WoW players browsing CurseForge / Wago — not other developers.
+`CHANGELOG.md` is **player-facing release notes**, not an engineering log. The audience is WoW players browsing this backport's GitHub page and in-game What's New — not other developers.
 
 - **Write in plain English.** A player should understand every bullet without knowing any code, module names, or addon internals.
 - **Describe the in-game effect, not the implementation.** Say what the user will now see / can now do / will no longer be broken — not which file changed, which API was introduced, which refactor happened.
@@ -125,17 +125,19 @@ Rules:
 
 - Every file starts with an `All releases:` nav line linking each of the other series.
 - **`bash scripts/release.sh <version>` handles all of this:** it moves `[Unreleased]` into a dated `## [x.y.z]` section, archives the finished series when a new minor/major opens, rebuilds every nav line, regenerates `Core/PatchNotes.lua`, and bumps the TOC + `Constants.lua` versions. Don't hand-edit version sections or nav lines for a release.
-- `archive/` is ignored by `.pkgmeta`, so it never ships in the addon zip.
+- `scripts/package_wotlk.py` includes only runtime files and install/license/media attribution documents; `archive/`, tests, and development tools never ship in the addon ZIP.
 
 When in doubt, read the 1.1.0 - 1.1.7 sections in `archive/changelog/1.1.md` — they are the style guide. Match their voice.
 
 ## Releasing
 
 1. Notes sit under `## [Unreleased]` in `CHANGELOG.md`, and the working tree is clean (the script refuses otherwise).
-2. `bash scripts/release.sh <version>` — needs internet (it reads live game version numbers from Blizzard). It promotes the notes, regenerates `Core/PatchNotes.lua` (the in-game What's New), bumps the TOC + `Core/Constants.lua`, commits and tags.
-3. `git push origin master v<version>` — CI lints, minifies, re-runs the tests, and uploads to CurseForge, Wago and GitHub Releases.
+2. `bash scripts/release.sh <version>` — promotes the notes, regenerates `Core/PatchNotes.lua` (the in-game What's New), bumps the TOC + `Core/Constants.lua`, and creates a local commit and tag. It preserves interface 30300 and does not query live Blizzard versions.
+3. `git push origin master v<version>` — CI tests and packages the port; the version tag publishes a GitHub Release for this fork only. Never publish this fork to the upstream project's CurseForge or Wago listings.
 
-No local setup? Run the "Package and release" workflow by hand on GitHub (`workflow_dispatch`); it runs the same script.
+For a ZIP without a release, run `python scripts/package_wotlk.py`, or run the manual packaging workflow on GitHub (`workflow_dispatch`). Manual workflow runs produce a downloadable artifact without creating a release or tag.
+
+When preparing notes without creating a release tag, run `python scripts/promote_changelog.py --version v<version>`, update the TOC and Constants versions together, and run `python scripts/gen_patch_notes.py --version v<version>`. Never hand-edit generated `Core/PatchNotes.lua`.
 
 What's New shows only the **top** changelog section. For a hotfix right after a big release, rename the big section to the new version and add the fix to it, leaving `[Unreleased]` empty — players who skipped the big release still see all of it.
 

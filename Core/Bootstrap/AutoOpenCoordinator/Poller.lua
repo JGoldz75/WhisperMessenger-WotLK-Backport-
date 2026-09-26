@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 -- stylua: ignore start
 local DirectHooks = ns.BootstrapAutoOpenDirectHooks or require("WhisperMessenger.Core.Bootstrap.AutoOpenCoordinator.DirectHooks")
 local ConversationOps = ns.BootstrapAutoOpenConversationOps or require("WhisperMessenger.Core.Bootstrap.AutoOpenCoordinator.ConversationOps")
@@ -118,7 +120,7 @@ function Poller.Install(runtime, hooks, deps)
   end
 
   local function handleTellLauncher()
-    local timer = _G.C_Timer
+    local timer = FlavorCompat.GetTimer()
     if type(timer) ~= "table" or type(timer.After) ~= "function" then
       return
     end

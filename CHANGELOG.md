@@ -1,10 +1,24 @@
 # Changelog
 
-Player-friendly release notes for WhisperMessenger. This file covers the current 2.x series; older series live in [archive/changelog/](archive/changelog/).
+Player-friendly release notes for WhisperMessenger's WotLK backport. Version 2.0.2 is the first release of this fork for the original Wrath of the Lich King 3.3.5a client. Earlier entries preserve the upstream project's history and may describe features unavailable on this client. This file covers the current 2.x series; older series live in [archive/changelog/](archive/changelog/).
 
 All releases: **2.0.x (current)** · [1.4.x](archive/changelog/1.4.md) · [1.3.x](archive/changelog/1.3.md) · [1.2.x](archive/changelog/1.2.md) · [1.1.x](archive/changelog/1.1.md) · [1.0.x](archive/changelog/1.0.md) · [0.1.x](archive/changelog/0.1.md)
 
 ## [Unreleased]
+
+## [2.0.2] - 2026-09-26
+
+- WhisperMessenger now supports the original Wrath of the Lich King 3.3.5a client, including Frostmourne/Rebuffed.
+- Keep the familiar messenger window, themes, chat bubbles, saved conversations, drafts, quick replies, and contact settings.
+- Character whispers and party, raid, guild, and battleground chats work with the original client. Battleground chat appears in the Groups tab.
+- Replies, reactions, typing indicators, and read receipts are available between players running compatible copies of the addon.
+- Fixed: the addon could fail to load on original Wrath, leaving /wmsg unavailable.
+- Fixed: class icons now show the correct artwork on Frostmourne instead of slices of nearby icons.
+- Fixed: settings, contact menus, popups, clickable chat links, and notification sounds now work with the original Wrath client.
+- Fixed: friends and guildmates update their online status using information available from the original client. A player with no known status is not automatically marked offline.
+- The invite button now directs friends to this Wrath backport.
+- No extra compatibility addon is required. The backport can also run alongside ClassicAPI.
+- Battle.net whispers and communities are unavailable on this client. Notification sounds follow your game audio settings.
 
 ## [2.0.1] - 2026-09-26
 

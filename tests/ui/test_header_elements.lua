@@ -125,7 +125,7 @@ return function()
   do
     local emptyState = HeaderElements.createEmptyState(pane, nil, factory)
     local logo = FindUI.find(emptyState, function(node)
-      return node.frameType == "Texture" and node.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\icon.png"
+      return node.frameType == "Texture" and node.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\icon.tga"
     end)
     assert(logo ~= nil, "empty state should show addon logo")
   end

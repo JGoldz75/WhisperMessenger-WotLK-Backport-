@@ -7,6 +7,7 @@ local BNetResolver = ns.BNetResolver or require("WhisperMessenger.Transport.BNet
 local Constants = ns.Constants or require("WhisperMessenger.Core.Constants")
 local GroupChatIngest = ns.GroupChatIngest or require("WhisperMessenger.Core.Ingest.GroupChatIngest")
 local IncomingAlerts = ns.BootstrapEventBridgeIncomingAlerts or require("WhisperMessenger.Core.Bootstrap.EventBridge.IncomingAlerts")
+local LegacyEvents = ns.LegacyWrathEvents or require("WhisperMessenger.Core.LegacyWrath.Events")
 
 local GroupRouter = {}
 
@@ -104,6 +105,7 @@ local function resolveCommunityChatSource()
 end
 
 function GroupRouter.RouteGroupEvent(runtime, eventName, ...)
+  eventName = LegacyEvents.NormalizeGroupEvent(eventName)
   if runtime == nil or not GROUP_EVENTS[eventName] then
     return false
   end

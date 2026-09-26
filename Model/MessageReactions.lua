@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Protocol = ns.MessageReactionProtocol or require("WhisperMessenger.Model.MessageReactionProtocol")
 
 local MessageReactions = {}
@@ -218,7 +220,7 @@ end
 
 local function scheduleCleanup(state, deadline)
   local runtime = state.messageReactionRuntime
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if type(runtime) ~= "table" or type(timer) ~= "table" or type(timer.After) ~= "function" then
     return
   end
@@ -624,7 +626,7 @@ function MessageReactions.BeginPending(message, token, operation, key, actorName
     key = key,
     actorName = actorName,
   }
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if type(timer) ~= "table" or type(timer.After) ~= "function" then
     return
   end

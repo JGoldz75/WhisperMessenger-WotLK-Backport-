@@ -68,9 +68,11 @@ function TranscriptSetup.ConfigureTranscript(factory, transcript, parentWidth)
     transcript.text:SetWidth(sizeValue(transcript.scrollFrame, "GetWidth", "width", parentWidth - 32))
   end
   if transcript.text.SetScript then
-    transcript.text:SetScript("OnHyperlinkClick", function(self, link, text, button)
-      Hyperlinks.HandleClick(link, text, button, self)
-    end)
+    if not transcript.text.HasScript or transcript.text:HasScript("OnHyperlinkClick") then
+      transcript.text:SetScript("OnHyperlinkClick", function(self, link, text, button)
+        Hyperlinks.HandleClick(link, text, button, self)
+      end)
+    end
     transcript.text:SetScript("OnEditFocusGained", function(self)
       if self.ClearFocus then
         self:ClearFocus()

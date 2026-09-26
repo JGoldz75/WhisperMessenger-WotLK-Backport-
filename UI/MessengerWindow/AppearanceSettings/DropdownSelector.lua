@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local DropdownSkin = ns.MessengerWindowDropdownSkin or require("WhisperMessenger.UI.MessengerWindow.AppearanceSettings.DropdownSkin")
@@ -54,7 +56,9 @@ function DropdownSelector.Create(factory, parent, options)
   menu:SetFrameLevel((row.GetFrameLevel and row:GetFrameLevel() or 1) + 20)
   menu:SetClampedToScreen(true)
   menu:EnableMouseWheel(true)
-  if menu.SetClipsChildren then
+  -- Legacy compatibility providers emulate clipping by reparenting and
+  -- snapshotting geometry; that breaks later anchors and window resizing.
+  if not FlavorCompat.isLegacyWrath and menu.SetClipsChildren then
     menu:SetClipsChildren(true)
   end
 

@@ -57,7 +57,7 @@ function HoverFade.Attach(region)
   end
 
   function controller.paintColor(color)
-    repaint(region.SetColorTexture, color)
+    repaint(region.SetColorTexture or region.SetTexture, color)
   end
 
   function controller.paintVertex(color)
@@ -85,8 +85,13 @@ function HoverFade.Attach(region)
     group:Stop()
     region:SetAlpha(from)
     region:Show()
-    anim:SetFromAlpha(from)
-    anim:SetToAlpha(shown and peak or 0)
+    local target = shown and peak or 0
+    if anim.SetFromAlpha and anim.SetToAlpha then
+      anim:SetFromAlpha(from)
+      anim:SetToAlpha(target)
+    else
+      anim:SetChange(target - from)
+    end
     group:Play()
   end
 

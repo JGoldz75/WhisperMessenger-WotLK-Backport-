@@ -2,6 +2,8 @@ local addonName, ns = ...
 if type(ns) ~= "table" then
   ns = {}
 end
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LegacyChat = ns.LegacyWrathChat or require("WhisperMessenger.Core.LegacyWrath.Chat")
 
 local Common = ns.BootstrapLifecycleHandlersCommon
   or (type(require) == "function" and require("WhisperMessenger.Core.Bootstrap.LifecycleHandlers.Common"))
@@ -164,7 +166,9 @@ end
 -- GROUP_ROSTER_UPDATE is a fallback for legacy rows and clients that cannot
 -- provide party GUID lifecycle events. It must not reopen a closed GUID row.
 function GroupMembership.handleGroupRosterUpdate(Bootstrap)
-  if _G.IsInGroup == nil then
+  local isInGroup = Compat.isLegacyWrath and LegacyChat.IsInGroup or _G.IsInGroup
+  local isInRaid = Compat.isLegacyWrath and LegacyChat.IsInRaid or _G.IsInRaid
+  if isInGroup == nil then
     return true
   end
 
@@ -182,9 +186,9 @@ function GroupMembership.handleGroupRosterUpdate(Bootstrap)
   end
 
   local inGroup = {
-    PARTY = _G.IsInGroup(homeCategory()) and true or false,
-    INSTANCE_CHAT = _G.IsInGroup(instanceCategory()) and true or false,
-    RAID = (type(_G.IsInRaid) == "function" and _G.IsInRaid()) and true or false,
+    PARTY = isInGroup(homeCategory()) and true or false,
+    INSTANCE_CHAT = isInGroup(instanceCategory()) and true or false,
+    RAID = (type(isInRaid) == "function" and isInRaid(homeCategory())) and true or false,
   }
 
   local partyGUIDs = runtime.groupPartyGUIDsByCategory

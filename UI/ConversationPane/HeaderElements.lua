@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local LegacyUI = ns.LegacyWrathUI or require("WhisperMessenger.Core.LegacyWrath.UI")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local Localization = ns.Localization or require("WhisperMessenger.Locale.Localization")
@@ -159,7 +161,7 @@ function HeaderElements.applyDividerTheme(primary)
 end
 
 -- Empty-state layout (shown when no conversation is selected).
-local EMPTY_LOGO_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.png"
+local EMPTY_LOGO_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.tga"
 local EMPTY_WIDTH = 280
 local EMPTY_HEIGHT = 170
 local EMPTY_LOGO_SIZE = 48
@@ -175,7 +177,7 @@ end
 
 -- nativeChrome: Native WoW HUD -> Blizzard button art.
 function HeaderElements.createEmptyState(pane, selectedContact, factory, nativeChrome)
-  local createFrame = (factory and factory.CreateFrame) or _G.CreateFrame
+  local createFrame = (factory and factory.CreateFrame) or LegacyUI.CreateFrame
   local container = createFrame("Frame", nil, pane)
   container:SetPoint("CENTER", pane, "CENTER", 0, 0)
   container:SetSize(EMPTY_WIDTH, EMPTY_HEIGHT)

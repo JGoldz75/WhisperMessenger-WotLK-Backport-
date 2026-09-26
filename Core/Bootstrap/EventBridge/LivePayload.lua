@@ -4,6 +4,7 @@ if type(ns) ~= "table" then
 end
 
 local BNetResolver = ns.BNetResolver or require("WhisperMessenger.Transport.BNetResolver")
+local LegacyEvents = ns.LegacyWrathEvents or require("WhisperMessenger.Core.LegacyWrath.Events")
 
 local LivePayload = {}
 
@@ -22,7 +23,7 @@ function LivePayload.Build(runtime, eventName, ...)
     return {
       prefix = prefix,
       text = message,
-      channel = channel,
+      channel = LegacyEvents.NormalizeChannel(channel),
       playerName = sender,
     }
   end

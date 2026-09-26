@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local sizeValue = UIHelpers.sizeValue
@@ -143,7 +145,7 @@ local function scheduleSnapToEndRetry(view, Navigation, targetOffset, generation
     return
   end
 
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if type(timer) ~= "table" or type(timer.After) ~= "function" then
     return
   end

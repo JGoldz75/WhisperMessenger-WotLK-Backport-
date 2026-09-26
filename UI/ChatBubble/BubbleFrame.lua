@@ -10,6 +10,7 @@ local BubbleIcon = ns.ChatBubbleBubbleIcon or require("WhisperMessenger.UI.ChatB
 local ContextMenu = ns.ChatBubbleContextMenu or require("WhisperMessenger.UI.ChatBubble.ContextMenu")
 local HoverCopy = ns.ChatBubbleHoverCopy or require("WhisperMessenger.UI.ChatBubble.HoverCopy")
 local Hyperlinks = ns.UIHyperlinks or require("WhisperMessenger.UI.Hyperlinks")
+local LegacyLinks = ns.ChatBubbleLegacyLinks or require("WhisperMessenger.UI.ChatBubble.LegacyLinks")
 local MessageReactions = ns.MessageReactions or require("WhisperMessenger.Model.MessageReactions")
 local ReactionAssets = ns.ChatBubbleReactionAssets or require("WhisperMessenger.UI.ChatBubble.ReactionAssets")
 local ReactionBadge = ns.ChatBubbleReactionBadge or require("WhisperMessenger.UI.ChatBubble.ReactionBadge")
@@ -228,6 +229,7 @@ function BubbleFrame.CreateBubble(factory, parent, message, options)
   textFS:SetJustifyH("LEFT")
   textFS:SetText(displayText)
   textFS:SetPoint("TOPLEFT", frame, "TOPLEFT", pH, -pV - quoteHeight)
+  LegacyLinks.Update(options.persistentFactory or factory, frame, textFS, displayText, textColumnWidth, textHeight)
 
   -- Censored message indicator
   local CENSORED_LABEL_HEIGHT = 12

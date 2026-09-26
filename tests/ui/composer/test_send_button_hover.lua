@@ -3,7 +3,7 @@ local Theme = require("WhisperMessenger.UI.Theme")
 local FakeUI = require("tests.helpers.fake_ui")
 local FindUI = require("tests.helpers.find_ui")
 
-local SEND_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\send.png"
+local SEND_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\send.tga"
 local HOVER_CIRCLE_TEXTURE = "Interface\\CHARACTERFRAME\\TempPortraitAlphaMask"
 
 local function textureWithPath(frame, path)

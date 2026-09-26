@@ -3,6 +3,18 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+local LEGACY_SOUNDS = {
+  whisper = "TellMessage",
+  ping = "MapPing",
+  chime = "FriendJoin",
+  bell = "AuctionWindowOpen",
+  raid_warning = "RaidWarning",
+  ready = "ReadyCheck",
+  map = "MapPing",
+  ding = "LevelUp",
+}
+
 local SOUND_OPTIONS = {
   { key = "whisper", label = "Whisper", soundId = 3081 },
   { key = "ping", label = "Ping", soundId = 5274 },
@@ -31,18 +43,27 @@ local DEFAULT_SOUND_KEY = "whisper"
 
 local SoundPlayer = {}
 
+local function play(soundKey)
+  if type(_G.PlaySound) ~= "function" then
+    return
+  end
+  if FlavorCompat.isLegacyWrath then
+    _G.PlaySound(LEGACY_SOUNDS[soundKey] or LEGACY_SOUNDS.whisper)
+    return
+  end
+  _G.PlaySound(SOUND_BY_KEY[soundKey] or SOUND_BY_KEY[DEFAULT_SOUND_KEY], "Master")
+end
+
 function SoundPlayer.Play(settings)
   local soundKey = settings.notificationSound or DEFAULT_SOUND_KEY
-  local soundId = SOUND_BY_KEY[soundKey] or SOUND_BY_KEY[DEFAULT_SOUND_KEY]
 
   -- Play on Master channel so notification uses dedicated channel settings.
   -- Do not toggle global sound CVars; changing them can leak unrelated game audio.
-  _G.PlaySound(soundId, "Master")
+  play(soundKey)
 end
 
 function SoundPlayer.Preview(soundKey)
-  local soundId = SOUND_BY_KEY[soundKey] or SOUND_BY_KEY[DEFAULT_SOUND_KEY]
-  _G.PlaySound(soundId, "Master")
+  play(soundKey)
 end
 
 ns.SoundPlayer = SoundPlayer

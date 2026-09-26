@@ -4,12 +4,12 @@ if type(ns) ~= "table" then
 end
 
 -- Soft drop shadow around the custom-chrome window. Eight pieces
--- of Media/shadow.png (a 64px texture whose outer 16px band is the blurred
+-- of Media/shadow.tga (a 64px texture whose outer 16px band is the blurred
 -- falloff) are created once on the window's lowest background sublayer and
 -- sit fully outside the window edge. Never used on rows or bubbles.
 local WindowShadow = {}
 
-local SHADOW_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\shadow.png"
+local SHADOW_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\shadow.tga"
 local OUTSET = 14
 local ALPHA = 0.5
 local LO, HI = 0.25, 0.75 -- texcoord edges of the 16px band in a 64px texture

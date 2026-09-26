@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local LegacyUI = ns.LegacyWrathUI or require("WhisperMessenger.Core.LegacyWrath.UI")
+
 local ContextMenu = {}
 -- stylua: ignore start
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
@@ -36,7 +38,7 @@ local function getMenuFrame()
   end
 
   -- UIDropDownMenuTemplate was removed in Retail 10.0 — pcall so a throw falls through to CopyText.
-  local ok, created = pcall(_G.CreateFrame, "Frame", MENU_FRAME_NAME, _G.UIParent, "UIDropDownMenuTemplate")
+  local ok, created = pcall(LegacyUI.CreateFrame, "Frame", MENU_FRAME_NAME, _G.UIParent, "UIDropDownMenuTemplate")
   if not ok then
     return nil
   end
@@ -80,7 +82,7 @@ function ContextMenu.Open(text, anchorFrame, options)
   elseif type(options.onReact) == "function" then
     local factory = options.factory
     if factory == nil and type(_G.CreateFrame) == "function" then
-      factory = { CreateFrame = _G.CreateFrame }
+      factory = { CreateFrame = LegacyUI.CreateFrame }
     end
     if
       ReactionPicker.Open(factory, anchorFrame, options.message, options.onReact, function()

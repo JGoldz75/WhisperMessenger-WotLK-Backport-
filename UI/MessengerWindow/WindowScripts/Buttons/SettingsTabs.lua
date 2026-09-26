@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local ScrollView = ns.ScrollView or require("WhisperMessenger.UI.ScrollView.ScrollView")
 
@@ -112,8 +114,9 @@ function SettingsTabs.Wire(options)
     -- a follow-up tick that lands after layout settles. C_Timer is
     -- absent in fake_ui — the synchronous attempt above is the only
     -- path the tests exercise.
-    if _G.C_Timer and type(_G.C_Timer.After) == "function" then
-      _G.C_Timer.After(0, function()
+    local timer = FlavorCompat.GetTimer()
+    if timer and type(timer.After) == "function" then
+      timer.After(0, function()
         applyVisibleTabContentHeight(visiblePanel)
       end)
     end

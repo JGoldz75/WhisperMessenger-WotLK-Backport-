@@ -104,7 +104,7 @@ return function()
   -- test_glow_uses_inner_glow_texture_with_additive_blend
   local tex = pulse.glowTexture
   assert(
-    tex.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.png",
+    tex.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\inner-glow.tga",
     "expected inner-glow texture, got " .. tostring(tex.texturePath)
   )
   assert(tex.atlas == nil, "outer halo atlas must not be used")

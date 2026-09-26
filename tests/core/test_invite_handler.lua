@@ -1,3 +1,4 @@
+local Localization = require("WhisperMessenger.Locale.Localization")
 local Store = require("WhisperMessenger.Model.ConversationStore")
 local InviteHandler = require("WhisperMessenger.Core.Bootstrap.InviteHandler")
 local WindowCallbacks = require("WhisperMessenger.Core.Bootstrap.WindowRuntime.WindowCallbacks")
@@ -49,6 +50,23 @@ return function()
 
   -- test_invite_text_fits_one_whisper
   assert(#InviteHandler.INVITE_TEXT <= 255, "the invite whisper must fit WoW's 255-byte chat limit")
+
+  -- test_invite_names_the_original_client_and_links_the_backport
+  local backportUrl = "https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-"
+  assert(string.find(InviteHandler.INVITE_TEXT, backportUrl, 1, true), "invite must link the compatible backport")
+  assert(string.find(InviteHandler.INVITE_TEXT, "3.3.5a", 1, true), "invite must identify original Wrath")
+
+  -- test_every_translated_invite_fits_one_whisper_and_links_the_backport
+  local locales = { "deDE", "esES", "esMX", "frFR", "itIT", "koKR", "ptBR", "ruRU", "zhCN", "zhTW" }
+  for _, code in ipairs(locales) do
+    local catalog = require("WhisperMessenger.Locale." .. code)
+    local translated = catalog[InviteHandler.INVITE_TEXT]
+    assert(type(translated) == "string" and translated ~= "", code .. " must translate the invite")
+    assert(#translated <= 255, code .. " invite exceeds the 255-byte whisper limit: " .. #translated)
+    assert(string.find(translated, backportUrl, 1, true), code .. " invite must link the compatible backport")
+    assert(string.find(translated, "3.3.5a", 1, true), code .. " invite must identify original Wrath")
+    assert(Localization.Text(InviteHandler.INVITE_TEXT, code) == translated, code .. " invite must use its translation")
+  end
 
   -- test_invite_sends_one_whisper_and_marks_the_conversation
   do

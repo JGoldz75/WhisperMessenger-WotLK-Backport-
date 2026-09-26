@@ -10,6 +10,7 @@ local ContentDetector = ns.ContentDetector or require("WhisperMessenger.Core.Con
 local BNetIdentity = ns.BNetIdentity or require("WhisperMessenger.Core.BNetIdentity")
 local MessageReactions = ns.MessageReactions or require("WhisperMessenger.Model.MessageReactions")
 local OutgoingDelivery = ns.OutgoingDelivery or require("WhisperMessenger.Model.OutgoingDelivery")
+local LegacyChat = ns.LegacyWrathChat or require("WhisperMessenger.Core.LegacyWrath.Chat")
 local RuntimeFactory = {}
 
 local function currentTime()
@@ -117,9 +118,9 @@ function RuntimeFactory.CreateRuntimeState(accountState, characterState, localPr
     pendingOutgoing = {},
     sendStatusByConversation = {},
     availabilityByGUID = {},
-    chatApi = options.chatApi or _G.C_ChatInfo or {},
+    chatApi = options.chatApi or LegacyChat.GetChatApi(),
     bnetApi = options.bnetApi or _G.C_BattleNet or {},
-    friendListApi = options.friendListApi or _G.C_FriendList or {},
+    friendListApi = options.friendListApi or LegacyChat.GetFriendListApi(),
     playerInfoByGUID = options.playerInfoByGUID or _G.GetPlayerInfoByGUID,
     localFaction = options.localFaction or (type(_G["UnitFactionGroup"]) == "function" and _G["UnitFactionGroup"]("player") or nil),
     store = store,

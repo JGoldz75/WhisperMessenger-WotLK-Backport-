@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local LegacyUI = ns.LegacyWrathUI or require("WhisperMessenger.Core.LegacyWrath.UI")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local setFontObject = UIHelpers.setFontObject
@@ -14,7 +16,7 @@ local EmptyState = {}
 -- theme: optional theme override (defaults to the shared Theme module)
 function EmptyState.Create(parent, theme)
   local resolvedTheme = theme or Theme
-  local frame = _G.CreateFrame("Frame", nil, parent)
+  local frame = LegacyUI.CreateFrame("Frame", nil, parent)
   frame:SetAllPoints(parent)
   frame:Hide()
 

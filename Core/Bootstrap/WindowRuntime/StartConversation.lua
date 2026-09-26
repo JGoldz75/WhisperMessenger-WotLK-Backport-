@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Identity = ns.Identity or require("WhisperMessenger.Model.Identity")
 local Store = ns.ConversationStore or require("WhisperMessenger.Model.ConversationStore")
 local TextLimits = ns.TextLimits or require("WhisperMessenger.Util.TextLimits")
@@ -89,7 +91,7 @@ function StartConversation.Create(options)
       window.setTabMode("whispers")
     end
     selectConversation(conversationKey)
-    focusComposerInput(window, timer or _G.C_Timer)
+    focusComposerInput(window, timer or FlavorCompat.GetTimer())
     return true
   end
 

@@ -46,7 +46,7 @@ return function()
   local composerFill = FindUI.ofType(composer.input, "Texture")[1]
   local sendIcon = assert(
     FindUI.find(composer.sendButton, function(node)
-      return node.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\send.png"
+      return node.texturePath == "Interface\\AddOns\\WhisperMessenger\\Media\\send.tga"
     end),
     "expected a send glyph"
   )

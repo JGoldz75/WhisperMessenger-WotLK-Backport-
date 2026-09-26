@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local Theme = ns.Theme or require("WhisperMessenger.UI.Theme")
 local UIHelpers = ns.UIHelpers or require("WhisperMessenger.UI.Helpers")
 local sizeValue = UIHelpers.sizeValue
@@ -34,7 +36,9 @@ function Factory.Create(factory, parent, options)
   -- scrollFrame's rect. Contact-row Buttons live inside the scroll child, and
   -- a partial last row at the bottom paints on top of the pane border and
   -- window chrome without this call.
-  if scrollFrame.SetClipsChildren then
+  -- Legacy compatibility providers emulate clipping by reparenting and
+  -- snapshotting geometry; that breaks later anchors and window resizing.
+  if not FlavorCompat.isLegacyWrath and scrollFrame.SetClipsChildren then
     scrollFrame:SetClipsChildren(true)
   end
 

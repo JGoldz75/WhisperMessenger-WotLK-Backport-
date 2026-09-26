@@ -37,9 +37,9 @@ end
 
 return function()
   local previousPreset = Theme.GetPreset()
-  assert(Theme.TEXTURES.pin_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\pin.png", "pin icon path in Theme.TEXTURES")
-  assert(Theme.TEXTURES.unpin_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\unpin.png", "unpin icon path in Theme.TEXTURES")
-  assert(Theme.TEXTURES.pinned_marker == "Interface\\AddOns\\WhisperMessenger\\Media\\pinned.png", "pinned marker path in Theme.TEXTURES")
+  assert(Theme.TEXTURES.pin_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\pin.tga", "pin icon path in Theme.TEXTURES")
+  assert(Theme.TEXTURES.unpin_icon == "Interface\\AddOns\\WhisperMessenger\\Media\\unpin.tga", "unpin icon path in Theme.TEXTURES")
+  assert(Theme.TEXTURES.pinned_marker == "Interface\\AddOns\\WhisperMessenger\\Media\\pinned.tga", "pinned marker path in Theme.TEXTURES")
 
   -- test_modern_pinned_row_shows_marker_not_chevron
   Theme.SetPreset("wow_default")
@@ -47,7 +47,7 @@ return function()
   local pinnedRow, plainRow = rows[1], rows[2]
   local marker = pinnedRow.pinnedMarker
   assert(marker ~= nil and marker.shown == true, "modern: pinned row shows the pinned marker")
-  assert(marker.texturePath == Theme.TEXTURES.pinned_marker, "modern: marker uses pinned.png")
+  assert(marker.texturePath == Theme.TEXTURES.pinned_marker, "modern: marker uses pinned.tga")
   assert(marker.width >= 10 and marker.width <= 12, "modern: marker is 10-12px")
   pinnedRow.timeLabel:Show() -- fake UI starts widgets hidden
   assert(colorsMatch(marker.vertexColor, Theme.COLORS.text_secondary), "modern: marker in secondary text colour")
@@ -68,13 +68,13 @@ return function()
   hover(pinnedRow, true)
   assert(pinnedRow.pinButton.shown == true and pinnedRow.removeButton.shown == true, "hover shows the actions")
   assert(pinnedRow.timeLabel.shown == true and marker.shown == false, "hover keeps the timestamp, hides the marker")
-  assert(pinnedRow.pinButton.icon.texturePath == Theme.TEXTURES.unpin_icon, "pinned row action is Unpin (unpin.png)")
+  assert(pinnedRow.pinButton.icon.texturePath == Theme.TEXTURES.unpin_icon, "pinned row action is Unpin (unpin.tga)")
   assert(colorsMatch(pinnedRow.pinButton.icon.vertexColor, Theme.COLORS.action_icon), "unpin glyph is neutral, not yellow")
   hover(pinnedRow, false)
   assert(pinnedRow.timeLabel.shown == true and marker.shown == true, "leave restores timestamp and marker")
 
   hover(plainRow, true)
-  assert(plainRow.pinButton.icon.texturePath == Theme.TEXTURES.pin_icon, "unpinned row action is Pin to top (pin.png)")
+  assert(plainRow.pinButton.icon.texturePath == Theme.TEXTURES.pin_icon, "unpinned row action is Pin to top (pin.tga)")
   hover(plainRow, false)
 
   -- test_name_not_squeezed_by_marker

@@ -5,6 +5,7 @@ end
 
 local Constants = ns.Constants or require("WhisperMessenger.Core.Constants")
 local EventUtils = ns.EventUtils or require("WhisperMessenger.Core.EventUtils")
+local LegacyEvents = ns.LegacyWrathEvents or require("WhisperMessenger.Core.LegacyWrath.Events")
 
 local Registration = {}
 
@@ -13,14 +14,12 @@ local function registerEventIfSupported(frame, eventName)
 end
 
 local function unregisterEventIfSupported(frame, eventName)
-  local ok, err = pcall(frame.UnregisterEvent, frame, eventName)
-  if ok then
-    return true
+  for _, name in ipairs(LegacyEvents.ResolveNames(eventName)) do
+    local ok, err = pcall(frame.UnregisterEvent, frame, name)
+    if not ok and not EventUtils.IsUnknownEventError(err) then
+      error(err)
+    end
   end
-  if EventUtils.IsUnknownEventError(err) then
-    return false
-  end
-  error(err)
 end
 
 function Registration.RegisterLiveEvents(frame)

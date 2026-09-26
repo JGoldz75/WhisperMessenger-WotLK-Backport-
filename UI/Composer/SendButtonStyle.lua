@@ -13,7 +13,7 @@ local HoverFade = ns.UIHelpersHoverFade or require("WhisperMessenger.UI.Helpers.
 local SendButtonStyle = {}
 
 local ICON_SIZE = 18
-local SEND_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\send.png"
+local SEND_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\send.tga"
 -- Neutral grey at half alpha for the disabled glyph, whatever the preset.
 local DISABLED_GLYPH = { 0.62, 0.62, 0.62, 0.5 }
 -- How far the hovered glyph moves toward white.

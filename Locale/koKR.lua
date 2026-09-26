@@ -333,6 +333,7 @@ local Korean = {
   ["typing…"] = "입력 중…",
   ["Seen"] = "읽음",
   ["Uses WM"] = "WM 사용 중",
+  ["I use WhisperMessenger for whispers on original WoW 3.3.5a. Get the backport: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-"] = "오리지널 WoW 3.3.5a에서 귓속말용 WhisperMessenger를 써요. 다운로드: https://github.com/JGoldz75/WhisperMessenger-WotLK-Backport-",
   ["Invite to WM"] = "WM 초대",
   ["Invite sent"] = "초대 보냄",
   ["Click to whisper this player an invite to WhisperMessenger."] = "클릭하면 이 플레이어에게 WhisperMessenger 초대 귓속말을 보냅니다.",

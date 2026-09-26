@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local ScriptBindings = {}
 
 function ScriptBindings.Bind(options)
@@ -38,7 +40,7 @@ function ScriptBindings.Bind(options)
   end
 
   local function startAlphaTicker()
-    local timer = _G.C_Timer
+    local timer = FlavorCompat.GetTimer()
     if alphaTicker ~= nil or type(timer) ~= "table" or type(timer.NewTicker) ~= "function" then
       return
     end

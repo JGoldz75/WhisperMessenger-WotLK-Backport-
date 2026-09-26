@@ -4,10 +4,11 @@ if type(ns) ~= "table" then
 end
 
 local TextLimits = ns.TextLimits or require("WhisperMessenger.Util.TextLimits")
+local Compat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
 
 local Protocol = {}
 
-local MAX_PAYLOAD_BYTES = 255
+local MAX_PAYLOAD_BYTES = Compat.isLegacyWrath and 250 or 255
 local VERSION = "1"
 local ELLIPSIS = "…"
 local OPEN_QUOTE = "“"

@@ -1,115 +1,67 @@
-name: Package and release
+name: Package WotLK and publish GitHub release
 
 on:
   push:
-    tags:
-      - "**"
-
+    tags: ['v*']
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Release version (e.g. 1.0.0 or v1.0.0)"
-        required: true
-        type: string
-      release_type:
-        description: "Release type"
-        required: true
-        type: choice
-        options:
-          - release
-          - beta
-          - alpha
-        default: release
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  lint:
+  validate:
+    uses: ./.github/workflows/ci.yml
+
+  package:
+    needs: validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run StyLua
-        run: npx --yes @johnnymorganz/stylua-bin@2.5.2 --check .
-
-      - name: Run Luacheck
-        uses: lunarmodules/luacheck@v1
-
-  release:
-    needs: lint
-    runs-on: ubuntu-latest
-
-    env:
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
-      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
-      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-      ZIPOPT: "-9 -D"
-
-    steps:
-      - name: Clone project
-        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Bump version, update TOCs, tag (manual dispatch)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Check release tag and extract player notes
+        if: github.event_name == 'push' && github.ref_type == 'tag'
         run: |
-          set -euo pipefail
-          INPUT_VERSION="${{ inputs.version }}"
-          NORMALIZED_VERSION="${INPUT_VERSION#v}"
-          TAG_VERSION="v${NORMALIZED_VERSION}"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import re
 
-          if git show-ref --verify --quiet "refs/tags/${TAG_VERSION}"; then
-            echo "Tag ${TAG_VERSION} already exists; nothing to do."
-            exit 0
-          fi
-
-          # Single source of truth for the version + TOC bump.
-          bash scripts/release.sh "$INPUT_VERSION"
-
-          # scripts/release.sh creates the commit + annotated tag locally;
-          # push both so the package step picks up the tag.
-          git push origin HEAD:master
-          git push origin "${TAG_VERSION}"
-
-      - name: Install Lua 5.1
+          tag = os.environ["GITHUB_REF_NAME"]
+          assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", tag), "Release tag must be vX.Y.Z"
+          toc = Path("WhisperMessenger.toc").read_text(encoding="utf-8")
+          assert re.search(r"(?m)^## Interface: 30300$", toc), "This release must target original Wrath"
+          version = re.search(r"(?m)^## Version: (.+)$", toc)
+          assert version and version.group(1) == tag, "Tag and addon version do not match"
+          changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
+          heading = re.search(r"(?m)^## \[" + re.escape(tag[1:]) + r"\][^\n]*\n", changelog)
+          assert heading, "No changelog section found for the release tag"
+          notes = re.split(r"(?m)^## ", changelog[heading.end():], maxsplit=1)[0].strip()
+          assert notes, "Release notes are empty"
+          (Path(os.environ["RUNNER_TEMP"]) / "wotlk-release-notes.md").write_text(notes + "\n", encoding="utf-8")
+          PY
+      - name: Build installable WotLK package
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends lua5.1
-
-      - name: Minify release Lua
-        env:
-          LUASRCDIET_REV: e9ceefdd1b3a03bc6c444e8fbb41c506adbbf25f
-        run: |
-          set -euo pipefail
-          MINIFIER_DIR="${RUNNER_TEMP}/luasrcdiet"
-          git clone --quiet https://github.com/jirutka/luasrcdiet.git "${MINIFIER_DIR}"
-          git -C "${MINIFIER_DIR}" checkout --quiet --detach "${LUASRCDIET_REV}"
-          export LUA_PATH="${MINIFIER_DIR}/?.lua;${MINIFIER_DIR}/?/init.lua;;"
-
-          while IFS= read -r -d '' file; do
-            lua5.1 "${MINIFIER_DIR}/bin/luasrcdiet" \
-              --basic \
-              --noopt-emptylines \
-              --noopt-locals \
-              --quiet \
-              "${file}" \
-              -o "${file}.min"
-            mv "${file}.min" "${file}"
-          done < <(
-            find Bootstrap.lua Core Locale Model Persistence Transport UI Util \
-              -type f -name '*.lua' -print0
-          )
-
-      - name: Test minified release
-        run: |
-          set -euo pipefail
-          while IFS= read -r -d '' test_file; do
-            lua5.1 tests/run.lua "${test_file}"
-          done < <(find tests -type f -name 'test_*.lua' -print0 | sort -z)
-
-
-      - name: Package and release
-        uses: BigWigsMods/packager@v2
+          python scripts/package_wotlk.py
+          sha256sum dist/*.zip > dist/SHA256SUMS
+      - name: Upload installable package
+        uses: actions/upload-artifact@v4
         with:
-          args: -u
+          name: WhisperMessenger-WotLK-3.3.5a-${{ github.run_number }}
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS
+          if-no-files-found: error
+      - name: Publish tagged release on this GitHub fork
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip dist/SHA256SUMS \
+            --verify-tag --title "${GITHUB_REF_NAME}" \
+            --notes-file "${RUNNER_TEMP}/wotlk-release-notes.md"

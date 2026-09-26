@@ -14,7 +14,7 @@ local Desaturation = ns.ToggleIconDesaturation or require("WhisperMessenger.UI.T
 
 local Localization = ns.Localization or require("WhisperMessenger.Locale.Localization")
 local KeybindHints = ns.KeybindHints or require("WhisperMessenger.UI.Shared.KeybindHints")
-local ADDON_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.png"
+local ADDON_ICON_TEXTURE = "Interface\\AddOns\\WhisperMessenger\\Media\\icon.tga"
 
 local CHAT_ICON_RATIO = 0.9 -- chat icon scale factor vs ICON_SIZE
 local HOVER_ICON_COLOR = { 1, 1, 1, 0.65 }

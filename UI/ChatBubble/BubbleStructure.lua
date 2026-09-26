@@ -35,7 +35,7 @@ function BubbleStructure.createStructure(frame)
   if frame.SetHyperlinksEnabled then
     frame:SetHyperlinksEnabled(true)
   end
-  if frame.SetScript then
+  if frame.SetScript and (not frame.HasScript or frame:HasScript("OnHyperlinkClick")) then
     frame:SetScript("OnHyperlinkEnter", function(self, link, _text)
       Hyperlinks.HandleEnter(self, link)
     end)

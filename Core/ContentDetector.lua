@@ -20,6 +20,9 @@ function ContentDetector.IsMythicRestricted(getInstanceInfo)
 end
 
 function ContentDetector.IsCompetitiveContent(getInstanceInfo)
+  if FlavorCompat and FlavorCompat.isLegacyWrath then
+    return false
+  end
   if type(getInstanceInfo) ~= "function" then
     return false
   end

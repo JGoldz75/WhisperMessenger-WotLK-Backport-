@@ -3,6 +3,8 @@ if type(ns) ~= "table" then
   ns = {}
 end
 
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
+
 local ContactEnricher = ns.ContactEnricher or require("WhisperMessenger.Model.ContactEnricher")
 local WhisperGateway = ns.WhisperGateway or require("WhisperMessenger.Transport.WhisperGateway")
 local BadgeFilter = ns.ToggleIconBadgeFilter or require("WhisperMessenger.UI.ToggleIcon.BadgeFilter")
@@ -46,7 +48,7 @@ function WindowCoordinator.Create(options)
   local presenceCache = options.presenceCache
   local livePresenceSender = options.livePresenceSender
   local requestAvailability = options.requestAvailability or WhisperGateway.RequestAvailability
-  local cTimer = options.cTimer or _G.C_Timer
+  local cTimer = options.cTimer or FlavorCompat.GetTimer()
   local selectConversation = options.selectConversation
 
   local statusTicker = nil

@@ -8,6 +8,7 @@ local AlertPolicy = ns.AlertPolicy or require("WhisperMessenger.Model.AlertPolic
 local ChannelMessageStore = ns.ChannelMessageStore or require("WhisperMessenger.Model.ChannelMessageStore")
 local LivePresence = ns.LivePresence or require("WhisperMessenger.Model.LivePresence")
 local PendingOutgoing = ns.EventRouterPendingOutgoing or require("WhisperMessenger.Core.EventRouter.PendingOutgoing")
+local FlavorCompat = ns.FlavorCompat or require("WhisperMessenger.Core.FlavorCompat")
 
 
 -- stylua: ignore start
@@ -70,7 +71,7 @@ local OUTGOING_WHISPER_EVENTS = {
 -- remaining time instead of stacking a fresh timer per packet.
 local TYPING_EXPIRY_GRACE = 0.2
 local function scheduleTypingExpiry(runtime, refreshWindow, conversationKey)
-  local timer = _G.C_Timer
+  local timer = FlavorCompat.GetTimer()
   if timer == nil or type(timer.After) ~= "function" then
     return
   end

@@ -4,7 +4,7 @@ local function loadAddonFromToc(addonName, ns)
   for line in io.lines("WhisperMessenger.toc") do
     local trimmed = line:match("^%s*(.-)%s*$")
     if trimmed ~= "" and trimmed:sub(1, 2) ~= "##" and not trimmed:match("%.xml$") then
-      local chunk = assert(loadfile(trimmed))
+      local chunk = assert(loadfile((trimmed:gsub("\\", "/"))))
       chunk(addonName, ns)
     end
   end
